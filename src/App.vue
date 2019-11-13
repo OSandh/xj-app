@@ -1,22 +1,31 @@
 <template>
-  <div id="app">
+  <v-app>
+    <v-app-bar
+      app
+      color="primary"
+      dark
+    >
+      xj-app
+    </v-app-bar>
+
+    <v-content>
+      <router-view></router-view>
+    </v-content>
     
-  </div>
+  </v-app>
 </template>
 
 <script>
-// import Sidebar from './components/Sidebar.vue';
-// import Header from './components/Header.vue';
 
 export default {
-  name: 'app',
+  name: 'App',
 
   components: {
-    
-  }
-}
+
+  },
+
+  data: () => ({
+    //
+  }),
+};
 </script>
-
-<style>
-
-</style>
