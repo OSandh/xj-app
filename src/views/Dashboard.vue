@@ -1,6 +1,6 @@
 <template>
-  <div>
-    
+  <div class="dashboard">
+    <h1>Welcome</h1>
   </div>
 </template>
 

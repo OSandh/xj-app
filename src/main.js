@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Routes from './routes.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import 'material-design-icons-iconfont';
 
 
 Vue.use(VueRouter);
