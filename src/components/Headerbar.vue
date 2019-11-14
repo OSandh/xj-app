@@ -1,36 +1,69 @@
 <template>
-  <nav>
+  <div>
+
     <v-app-bar 
-      app 
-      dark 
-      color="indigo"
-      flat
+      app
+      color="white"
     >
-      xj-app
-      <router-link to="/dashboard">
-        <v-btn dark class="indigo darken-3">
-          <v-icon left>home</v-icon>
-          <span>Home</span>
-        </v-btn>
-      </router-link>
+      <v-app-bar-nav-icon 
+        class="d-lg-none"
+        @click="drawer = !drawer"
+        
+      />
       
-      <router-link to="/test">
-        <v-btn dark class="indigo darken-3">
-          Testing
-        </v-btn>
-      </router-link>
+      <v-toolbar-title>
+        <v-icon left color="red">{{ icon }}</v-icon>
+        <span class="grey--text">{{ title }}</span>
+        <span class="text-uppercase">
+          {{ subTitle }}
+        </span>
+      </v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon>
+        <v-icon>person</v-icon>
+      </v-btn>
+      
     </v-app-bar>
-  </nav>
+
+    <v-navigation-drawer v-model="drawer" app class="blue-grey darken-3">
+      <Sidemenu/>
+    </v-navigation-drawer>
+
+  </div>
 </template>
 
 <script>
+import Sidemenu from './Sidemenu.vue';
+import { eventBus } from '../main';
+
+
 export default {
-  name: 'header',
+  name: 'Headerbar',
+
+  props: {
+
+  },
+
+  components: {
+    Sidemenu,
+  },
 
   data() {
     return{
-      title: 'Nothing'
+      drawer: true,
+      icon: 'bar_chart',
+      title: 'Store overview',
+      subTitle: 'All stores',
     }
+  },
+  created() {
+    // Event listener for changing of headerbar title
+    eventBus.$on('changeHeaderTitle', (data) => {
+      this.icon = data.icon;
+      this.title = data.title;
+    })
   }
 }
 </script>

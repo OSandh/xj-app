@@ -1,9 +1,10 @@
 <template>
   <v-app>
-
-    <Headerbar/>
     
-    <Sidebar/>
+    <Headerbar id="headerbar"/>
+    
+
+  
     <!-- <v-app-bar
       app
       color="indigo"
@@ -34,19 +35,26 @@
 </template>
 
 <script>
-import Sidebar from './components/Sidebar.vue';
 import Headerbar from './components/Headerbar.vue'
 
 export default {
   name: 'App',
 
-  components: { 
-    Sidebar,
-    Headerbar
+  props: {
+
   },
 
+
   data: () => ({
-    //
+    headerTitle: 'Nothing',
   }),
+
+  components: { 
+    Headerbar,
+  },
+
+  methods: {
+    
+  }
 };
 </script>

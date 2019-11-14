@@ -9,6 +9,7 @@
       <span>Home</span>
     </v-btn>
 
+
     <v-btn class="hidden-md-and-up">
       Click me
     </v-btn>
@@ -20,7 +21,7 @@
     <h1 class="display-4">Massive display</h1>
     <v-btn class="pink white--text">Click me</v-btn>
     <v-btn dark depressed color="indigo">text</v-btn>
-    <v-btn flat color="pink">text</v-btn>
+    <v-btn text color="pink">text</v-btn>
 
 
 
