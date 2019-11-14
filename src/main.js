@@ -9,10 +9,12 @@ import 'material-design-icons-iconfont';
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios)
 
-const xjRouter = new VueRouter({
+const router = new VueRouter({
   routes: Routes,
   mode: 'history',
 });
+
+export const eventBus = new Vue();
 
 import App from './App.vue'
 import vuetify from './plugins/vuetify';
@@ -22,5 +24,5 @@ Vue.config.productionTip = false
 new Vue({
   render: h => h(App),
   vuetify,
-  router: xjRouter
+  router: router
 }).$mount('#app')
