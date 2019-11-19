@@ -1,41 +1,43 @@
 <template>
-  <div>
+  <v-container>
     <v-card 
       class="mx-auto"
       color="transparent"
+      flat
     >
       <v-img 
         class="mx-auto ma-4"
-        height="200px"
+        height="100px"
         :src="getLogo()">
       </v-img>
         
-      </v-card>
+    </v-card>
 
-      <v-card
-        class="mx.auto"
-        tile
-        flat
+    <v-card
+      class="mx.auto"
+      tile
+      flat
+      dark
+      color="blue-grey darken-3"
+    >
+      <!-- <v-subheader class="white--text">Test menu</v-subheader> -->
+
+      <v-list-item-group 
+        class="white--text"
         dark
-        color="blue-grey darken-3"
+        active-class="blue-grey darken-4"
       >
-        <!-- <v-subheader class="white--text">Test menu</v-subheader> -->
+        <v-list-item v-for="item in menuItems" :key="item.title">
+          <v-icon left>{{ item.icon }}</v-icon>
+          <v-list-item-content @click="eventBus.$emit('gotoRoute', item)">
+            {{ item.title }}
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
 
-        <v-list-item-group 
-          class="white--text"
-          dark
-          active-class="blue-grey darken-4"
-        >
-          <v-list-item v-for="item in menuItems" :key="item.title">
-            <v-list-item-content @click="gotoRoute(item)">
-              {{ item.title }}
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-
-      </v-card>
+    </v-card>
     
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -47,22 +49,24 @@ export default {
 
   data: () => {
     return {
+      eventBus: eventBus,
+
       logo: 'logo.svg',
 
       menuItems: [
         {
           title: 'Store overview',
-          icon: 'bar_chart',
-          route: '/'
+          icon: 'business',
+          route: '/store'
         },
         {
           title: 'Online overview',
-          icon: 'wifi',
+          icon: 'bar_chart',
           route: '/dashboard'
         },
         {
           title: 'Marketing',
-          icon: 'group',
+          icon: 'device_hub',
           route: '/test'
         },
         {
@@ -84,15 +88,6 @@ export default {
     }
   },
   methods: {
-    /**
-     * Navigate to different page
-     * and fire event for title change in headerbar
-     */
-    gotoRoute: function(item) {
-      eventBus.$emit('changeHeaderTitle', item);
-      this.$router.push(item.route);
-    },
-
     /**
      * Get logo src
      */

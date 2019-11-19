@@ -19,25 +19,28 @@
         </span>
       </v-toolbar-title>
 
-      <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>person</v-icon>
-      </v-btn>
+      <v-spacer></v-spacer> 
+      
+      <usermenu/>
       
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" app class="blue-grey darken-3">
-      <Sidemenu/>
+    <v-navigation-drawer 
+      v-model="drawer" 
+      app 
+      class="blue-grey darken-3"
+      width="210"
+    >
+      <sidemenu/>
     </v-navigation-drawer>
 
   </div>
 </template>
 
 <script>
-import Sidemenu from './Sidemenu.vue';
+import sidemenu from './Sidemenu.vue';
+import usermenu from './Usermenu.vue';
 import { eventBus } from '../main';
-
 
 export default {
   name: 'Headerbar',
@@ -47,7 +50,8 @@ export default {
   },
 
   components: {
-    Sidemenu,
+    sidemenu,
+    usermenu,
   },
 
   data() {
@@ -58,11 +62,24 @@ export default {
       subTitle: 'All stores',
     }
   },
+
+  methods: {
+    
+    gotoRoute: function(item) {
+      console.log(item);
+      eventBus.$emit('changeHeaderTitle', item);
+      this.$router.push(item.route);
+    },
+  },
+
   created() {
-    // Event listener for changing of headerbar title
-    eventBus.$on('changeHeaderTitle', (data) => {
+    /**
+     * Event for navigation to different page
+     */
+    eventBus.$on('gotoRoute', (data) => {
       this.icon = data.icon;
-      this.title = data.title;
+      this.title = data.title + ':';
+      this.$router.push(data.route);
     })
   }
 }

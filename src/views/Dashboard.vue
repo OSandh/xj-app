@@ -1,9 +1,9 @@
 <template>
-  <div class="dashboard">
+  <v-container>
+
     <v-card 
       class="ma-5"
-      elevation="3" 
-      max-width="400"
+      elevation="3"
     >
       <v-card-title>
         Welcome
@@ -13,15 +13,23 @@
       </v-card-text>
     </v-card>
     
-  </div>
+  </v-container>
 </template>
 
 <script>
+
+
 export default {
   name: 'dashboard',
 
-  components: {
+  data() {
+    return {
 
+    }
+  },
+
+  components: {
+    
   }
 }
 </script>
