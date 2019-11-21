@@ -1,19 +1,23 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
 import VueRouter from 'vue-router';
-import Routes from './routes.js';
+import router from './routes';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import 'material-design-icons-iconfont';
+import api from './api.js';
 
-Vue.use(Vuex);
-Vue.use(VueRouter);
+// Vuex store
+import store from './store';
+
 Vue.use(VueAxios, axios);
 
-const router = new VueRouter({
-  routes: Routes,
-  mode: 'history',
-});
+// router.beforeEach((to, from, next) => {
+//   //console.log(this.$store.state.isAuthenticated)
+//     if(!this.$store.state.isAuthenticated) 
+//       next('/login')
+//     //else
+//       //next()
+// })
 
 export const eventBus = new Vue();
 
@@ -32,5 +36,7 @@ new Vue({
   },
   render: h => h(App),
   vuetify,
-  router: router
+  router,
+  store,
+  api
 }).$mount('#app')

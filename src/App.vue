@@ -1,7 +1,7 @@
 <template>
   <v-app>
     
-    <headerbar id="headerbar"/>
+    <headerbar :hidden="!isAuthenticated" id="headerbar"/>
 
     <v-content>
       <router-view></router-view>
@@ -35,6 +35,12 @@ export default {
 
   methods: {
     
+  },
+
+  computed: {
+    isAuthenticated() {
+      return this.$store.getters['user/isAuthenticated'];
+    }
   }
 };
 </script>

@@ -1,43 +1,59 @@
 <template>
-  <v-container>
-    <v-card 
-      class="mx-auto"
-      color="transparent"
-      flat
+  
+  <v-navigation-drawer 
+    v-model="showSideMenu"
+    app 
+    class="blue-grey darken-3"
+    width="210"
+  >
+    <v-img 
+      class="mx-auto ma-4"
+      height="100px"
+      :src="getLogo()">
+    </v-img>
+      
+    <v-list
+      dense
+      class="white--text"
     >
-      <v-img 
-        class="mx-auto ma-4"
-        height="100px"
-        :src="getLogo()">
-      </v-img>
-        
-    </v-card>
-
-    <v-card
-      class="mx.auto"
-      tile
-      flat
-      dark
-      color="blue-grey darken-3"
-    >
-      <!-- <v-subheader class="white--text">Test menu</v-subheader> -->
-
       <v-list-item-group 
-        class="white--text"
-        dark
-        active-class="blue-grey darken-4"
+        
       >
-        <v-list-item v-for="item in menuItems" :key="item.title">
-          <v-icon left>{{ item.icon }}</v-icon>
-          <v-list-item-content @click="eventBus.$emit('gotoRoute', item)">
+        <v-list-item 
+          class="py-2 body-2"
+          v-for="item in menuItems" :key="item.title"
+          @click="eventBus.$emit('gotoRoute', item)"
+          v-slot:default="{ active }"
+          active-class="blue-grey darken-3"
+        >
+
+          <div v-if="!active"
+            class="pr-2"  
+          >
+            <v-icon color="white">{{ item.icon }}</v-icon>
+          </div>
+
+          <div v-if="active"
+            class="pr-2"
+          >
+            <v-icon color="red darken-4">{{ item.icon }}</v-icon>
+          </div>
+
+          <v-list-item-content 
+            class="px-3 white--text"
+          >
             {{ item.title }}
           </v-list-item-content>
         </v-list-item>
+
       </v-list-item-group>
 
-    </v-card>
-    
-  </v-container>
+    </v-list>
+
+
+
+  </v-navigation-drawer>
+
 </template>
 
 <script>
@@ -46,6 +62,10 @@ import { eventBus } from '../main'
 
 export default {
   name: "Sidemenu",
+
+  props: {
+    drawer: Boolean
+  },
 
   data: () => {
     return {
@@ -93,6 +113,12 @@ export default {
      */
     getLogo: function() {
       return require(`@/assets/${this.logo}`);
+    },
+  },
+
+  computed: {
+    showSideMenu(){
+      return this.$store.getters['showSideMenu'];
     }
   }
 }

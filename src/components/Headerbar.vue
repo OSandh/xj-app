@@ -7,12 +7,12 @@
     >
       <v-app-bar-nav-icon 
         class="d-lg-none"
-        @click="drawer = !drawer"
+        @click="toggle"
         
       />
       
       <v-toolbar-title>
-        <v-icon left color="red">{{ icon }}</v-icon>
+        <v-icon left color="red darken-4">{{ icon }}</v-icon>
         <span class="grey--text">{{ title }}</span>
         <span class="text-uppercase">
           {{ subTitle }}
@@ -25,14 +25,8 @@
       
     </v-app-bar>
 
-    <v-navigation-drawer 
-      v-model="drawer" 
-      app 
-      class="blue-grey darken-3"
-      width="210"
-    >
-      <sidemenu/>
-    </v-navigation-drawer>
+    <sidemenu/>
+
 
   </div>
 </template>
@@ -41,6 +35,7 @@
 import sidemenu from './Sidemenu.vue';
 import usermenu from './Usermenu.vue';
 import { eventBus } from '../main';
+import { api } from '../api.js';
 
 export default {
   name: 'Headerbar',
@@ -70,6 +65,16 @@ export default {
       eventBus.$emit('changeHeaderTitle', item);
       this.$router.push(item.route);
     },
+
+    toggleMenu: function() {
+      this.$store.commit('showSideMenu')
+    }
+  },
+
+  computed: {
+    showSideMenu() {
+      return this.$store.getters['showSideMenu'];
+    }
   },
 
   created() {
@@ -81,6 +86,7 @@ export default {
       this.title = data.title + ':';
       this.$router.push(data.route);
     })
+
   }
 }
 </script>

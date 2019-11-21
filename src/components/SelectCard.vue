@@ -10,8 +10,8 @@
       class="text-uppercase"
     >
       <v-select
+        id="selectMenu"
         class="ml-2 mr-2"
-
         width="150"
         :items="selectItems"
         v-model="firstItem"
