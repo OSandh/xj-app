@@ -2,7 +2,6 @@
 
   <v-menu 
     offset-y
-    transition="slide-y-transition"
     flat
     :nudge-width="200"
     :close-on-content-click="true"
@@ -101,7 +100,7 @@ export default {
         {
           title: 'Logout',
           icon: 'power_settings_new',
-          route: '/dashboard'
+          route: '/logout'
         }
       ]
     }

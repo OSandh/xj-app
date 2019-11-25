@@ -1,35 +1,88 @@
 <template>
   <v-container>
 
-    <selectcard :selectItems="storeItems"/>
+    <select-card :selectItems="chartTypes"/>
 
-    <chartcard/>
+    <echart-card :rawData="chartData" :chartOptions="eChartOptions"/>
 
-    <infocard :cardTitle="'Sales'"/>
+    <chart-card :rawData="chartData"/>
+
+    <info-card :cardTitle="'Sales'"/>
 
   </v-container>
 
 </template>
 
 <script>
-import selectcard from '../components/SelectCard.vue';
-import chartcard from '../components/ChartCard.vue';
-import infocard from '../components/InfoCard.vue';
+import SelectCard from '../components/SelectCard.vue';
+import ChartCard from '../components/ChartCard.vue';
+import EChartCard from '../components/EChartCard.vue'
+import InfoCard from '../components/InfoCard.vue';
 import api from '../api.js';
+import { eventBus } from '../main'
 
 export default {
   name: 'StoreView',
 
   components: {
-    selectcard,
-    chartcard,
-    infocard,
+    'select-card': SelectCard,
+    'chart-card': ChartCard,
+    'echart-card': EChartCard,
+    'info-card': InfoCard,
 
   },
 
-  data: () => {
+  data() {
     return {
+      chartData: [],
+      visitorData: [
+        ['date', 'visitors', 'prediction']
+      ],
+      salesData: [
+        ['date', 'sales', 'prediction']
+      ],
 
+      eChartOptions: {
+        title: {
+            id: 'chartTitle',
+            text: 'EChart Test',
+          },
+
+          legend: {},
+
+          tooltip: {
+            trigger: 'axis',
+          },
+
+          dataset: {
+            source: {}
+          },
+
+          xAxis: {
+            type: 'category',
+            data: []
+          },
+
+          yAxis: {
+            gridIndex: 0
+          },
+
+          grid: {
+
+          },
+
+          series: [
+            
+          ],
+
+          toolbox: {
+            feature: {
+              saveAsImage: []
+            }
+          }
+
+
+      }
     }
   },
 
@@ -44,22 +97,103 @@ export default {
     // just a test
     shortItems() {
       return this.$store.getters.shortItems;
+    },
+
+    chartTypes () {
+      var items = []
+      this.$store.getters['user/user'].dataTypes.forEach( element => {
+        items.push(element)
+      })
+      return items
     }
   },
+  mounted() {
+    var visitorsResponse = api.getVisitors()
+    visitorsResponse.then( (data) => {
+
+      data.forEach((element) => {
+        this.visitorData.push([element.date, element.visitors, element.prediction])
+      })
+
+      // TEMP
+      this.visitorData.forEach( (element) => {
+        this.chartData.push(element)
+      })
+
+      
+     // this.eChartOptions.title.subtext = this.chartData[0][1]
+      
+      var xAxis = []
+      var vData = []
+      var pData = []
+      this.visitorData.forEach(element => {
+        if(element[0] != 'date'){
+          console.log(element)
+          xAxis.push(element[0])
+
+          vData.push(element[1])
+
+          pData.push(element[2])
+        }
+        
+      });
+      this.eChartOptions.xAxis.data = xAxis
+
+      // Visitor line
+      this.eChartOptions.series.push({
+        name: 'Visitors', 
+        type: 'bar',
+        data: vData,
+        smooth: true
+      })
+      
+      // Prediction line
+      this.eChartOptions.series.push({
+        name: 'Prediction', 
+        type: 'line',
+        data: pData,
+        smooth: true
+      })
+      
+
+      
+      
+    })
+
+    var salesResponse = api.getSales()
+    salesResponse.then( (data) => {
+      
+      data.forEach((element) => {
+        this.salesData.push([element.date, element.sales, element.prediction])
+      })
+    })
+  },
+
   created() {
-    // var db = 'http://13.53.97.92/oskar/';
-    // console.log(db + 'get_visitors.php');
-    // var conn = 'http://13.53.97.92/oskar/get_visitors.php';
-    // this.axios.get(conn).then( (response) => {
-    //   console.log(response);
-    // }).catch(function(error){
-    //   console.log(error);
-    // })
+    eventBus.$on('selectionChanged', (data) => {
+      
+      console.log('changed to ' + data)
+      
 
-    
+      if(data == 'Visitors') {
+        this.chartData = []
 
-    
-    api.getVisitors();
+        this.visitorData.forEach( (element) => {
+          this.chartData.push(element)
+        })
+
+        console.log('Visitors filled')
+
+      } else if(data == 'Sales'){
+        this.chartData = []
+        this.salesData.forEach( (element) => {
+          this.chartData.push(element)
+        })
+
+        console.log('Sales filled')
+      }
+
+    })
   }
 }
 </script>

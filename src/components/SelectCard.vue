@@ -15,6 +15,7 @@
         width="150"
         :items="selectItems"
         v-model="firstItem"
+        v-on:change="selectionChanged"
       />
 
     </v-card>
@@ -23,6 +24,7 @@
 </template>
 
 <script>
+import { eventBus } from '../main'
 export default {
   props: {
     selectItems: Array
@@ -32,7 +34,13 @@ export default {
     return {
       firstItem: this.selectItems[0],
     }
-  }
+  },
+
+  methods: {
+    selectionChanged: (item) => {
+      eventBus.$emit('selectionChanged', item)
+    }
+  },
 
 }
 </script>

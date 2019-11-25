@@ -1,6 +1,7 @@
 const state = {
   user: {
     name: 'Dormy',
+    dataTypes: ['Visitors', 'Sales'],
     storeList: [
       {
         name: 'Örebro',
@@ -43,6 +44,11 @@ const getters = {
 const mutations = {
   setAuth: state => {
     state.isAuthenticated = true;
+    localStorage.setItem('isAuthed', JSON.stringify(state.isAuthenticated))
+  },
+  clearAuth: state => {
+    state.isAuthenticated = false;
+    localStorage.removeItem('isAuthed')
   }
 }
 

@@ -4,7 +4,7 @@
     elevation="3"
   >
 
-    <GChart
+    <g-chart
       id="chart"
       type="LineChart"
       :data="chartData"
@@ -21,19 +21,22 @@ import { GChart } from 'vue-google-charts';
 export default {
   name: 'chartcard',
 
-  components: {
-    GChart
+  props: {
+    rawData: Array
   },
 
-  data: () => {
+  components: {
+    'g-chart': GChart
+  },
+
+  computed: {
+    chartData: function() {
+      return this.rawData
+    }
+  },
+
+  data() {
     return {
-      chartData: [
-        ['Day', 'Actual', 'Prediction', 'Budget'],
-        ['1', 1000, 950, 900],
-        ['2', 1170, 1100, 1000],
-        ['3', 660, 660, 610],
-        ['4', 900, 1000, 950]
-      ],
 
       chartOptions: {
           title: '',
@@ -43,13 +46,13 @@ export default {
 
           pointsVisible: true,
 
-          hAxis: {
-            textPosition: 'none'
-          },
-          vAxis: {
-            ticks: [400, 600, 800, 1000, 1200, 1400],
-            textPosition: 'none',
-          },
+          // hAxis: {
+          //   textPosition: 'none'
+          // },
+          // vAxis: {
+          //   ticks: [400, 600, 800, 1000, 1200, 1400],
+          //   textPosition: 'none',
+          // },
 
           crosshair: {
             trigger: 'both',
@@ -66,7 +69,7 @@ export default {
           colors: ['darkred','darkblue', 'darkgreen'],
 
           chartArea: {
-            width: '95%',
+            width: '80%',
             backgroundColor: {
               fill: 'lightgrey',
               fillOpacity: 0.1

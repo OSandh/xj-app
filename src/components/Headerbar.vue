@@ -7,7 +7,7 @@
     >
       <v-app-bar-nav-icon 
         class="d-lg-none"
-        @click="toggle"
+        @click="toggleMenu"
         
       />
       
@@ -21,19 +21,25 @@
 
       <v-spacer></v-spacer> 
       
-      <usermenu/>
+      <user-menu/>
       
     </v-app-bar>
 
-    <sidemenu/>
-
+  <v-navigation-drawer 
+    v-model="drawer"
+    app 
+    class="blue-grey darken-3"
+    width="210"
+  >
+    <side-menu/>
+  </v-navigation-drawer>
 
   </div>
 </template>
 
 <script>
-import sidemenu from './Sidemenu.vue';
-import usermenu from './Usermenu.vue';
+import Sidemenu from './Sidemenu.vue';
+import Usermenu from './Usermenu.vue';
 import { eventBus } from '../main';
 import { api } from '../api.js';
 
@@ -45,8 +51,8 @@ export default {
   },
 
   components: {
-    sidemenu,
-    usermenu,
+    'side-menu': Sidemenu,
+    'user-menu': Usermenu,
   },
 
   data() {
@@ -59,15 +65,9 @@ export default {
   },
 
   methods: {
-    
-    gotoRoute: function(item) {
-      console.log(item);
-      eventBus.$emit('changeHeaderTitle', item);
-      this.$router.push(item.route);
-    },
-
     toggleMenu: function() {
-      this.$store.commit('showSideMenu')
+      //this.$store.commit('showSideMenu')
+      this.drawer = !this.drawer;
     }
   },
 
@@ -78,14 +78,7 @@ export default {
   },
 
   created() {
-    /**
-     * Event for navigation to different page
-     */
-    eventBus.$on('gotoRoute', (data) => {
-      this.icon = data.icon;
-      this.title = data.title + ':';
-      this.$router.push(data.route);
-    })
+
 
   }
 }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Dashboard from './views/Dashboard.vue'
+import Home from './views/Home.vue'
 import Storeview from './views/StoreView.vue'
 import Testing from './views/Testing.vue'
 import Login from './views/Login.vue'
@@ -13,40 +13,43 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    component: Dashboard,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/dashboard/*',
-    component: Dashboard,
-    meta: { requiresAuth: true }
+    component: Home,
+    meta: { requiresAuth: false },
+    children: [
+        {
+          path: '',
+          component: Storeview,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'logout',
+          name: 'logout',
+          component: Login,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'test',
+          name: 'test',
+          component: Testing,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'settings',
+          component: Storeview,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'store',
+          component: Storeview,
+          meta: { requiresAuth: true }
+        },
+    ] 
   },
   {
     path: '/login',
     name: 'login',
     component: Login,
     meta: { requiresAuth: false }
-  },
-  {
-    path: '/test',
-    name: 'test',
-    component: Testing,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/dashboard',
-    component: Dashboard,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/settings',
-    component: Dashboard,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/store',
-    component: Storeview,
-    meta: { requiresAuth: true }
   },
 ]
 
@@ -58,9 +61,9 @@ const router = new VueRouter({
 
 
 const onAuthRequired = async (to, from, next) => {
-  var isAuth = store.getters['user/isAuthenticated']
-  console.log(isAuth)
-  if(to.matched.some(record => record.meta.requiresAuth) && !isAuth) {
+  var isAuthed = store.getters['user/isAuthenticated']
+
+  if(to.matched.some(record => record.meta.requiresAuth) && !isAuthed) {
     next({name:'login'})
   } else {
     next()

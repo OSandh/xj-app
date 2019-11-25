@@ -1,15 +1,15 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import router from './routes';
-import axios from 'axios';
-import VueAxios from 'vue-axios';
-import 'material-design-icons-iconfont';
-import api from './api.js';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import router from './routes'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import 'material-design-icons-iconfont'
+import api from './api.js'
 
 // Vuex store
-import store from './store';
+import store from './store'
 
-Vue.use(VueAxios, axios);
+Vue.use(VueAxios, axios)
 
 // router.beforeEach((to, from, next) => {
 //   //console.log(this.$store.state.isAuthenticated)
@@ -19,7 +19,7 @@ Vue.use(VueAxios, axios);
 //       //next()
 // })
 
-export const eventBus = new Vue();
+export const eventBus = new Vue()
 
 import App from './App.vue'
 import vuetify from './plugins/vuetify';

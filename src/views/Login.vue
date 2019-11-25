@@ -1,34 +1,38 @@
 <template>
   <div>
-    <v-card
-      width="400"
-    >
-      <v-card-title>Login</v-card-title>
-      <v-form 
-        class="ma-5"
-        ref="form"
+    <v-container>
+      <v-card
+        class="mx-auto"
+        width="400"
       >
-        <v-text-field
-          v-model="userinfo.username"
-          label="Username"
-          required
-        />
-        <v-text-field
-          v-model="userinfo.password"
-          label="Password"
-          required
-          type="password"
-        />
-        
-        <v-btn 
+        <v-card-title>Login</v-card-title>
+        <v-form 
           class="ma-5"
-          @click="submit"
+          ref="form"
         >
-          Submit
-        </v-btn>
+          <v-text-field
+            v-model="userinfo.username"
+            label="Username"
+            required
+          />
+          <v-text-field
+            v-model="userinfo.password"
+            label="Password"
+            required
+            type="password"
+          />
+          
+          <v-btn 
+            class="ma-5"
+            @click="submit"
+          >
+            Submit
+          </v-btn>
 
-      </v-form>
-    </v-card>
+        </v-form>
+      </v-card>
+    </v-container>
+    
   </div> 
 </template>
 
@@ -39,11 +43,18 @@ export default {
   data: () => {
     return {
       userinfo: {
-        username: '',
-        password: '',
+        username: 'oskar',
+        password: 'losenord',
       }
       
 
+    }
+  },
+
+  mounted() {
+    if(localStorage.getItem('isAuthed')) {
+      this.$store.commit('user/setAuth')
+      this.$router.push('/')
     }
   },
 
@@ -56,7 +67,7 @@ export default {
         if(success) {
           console.log('success')
           this.$store.commit('user/setAuth')
-          this.$router.push('/store')
+          this.$router.push('/')
         } else {
           console.log('login failed')
         }

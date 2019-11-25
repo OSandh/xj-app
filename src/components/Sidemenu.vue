@@ -1,11 +1,6 @@
 <template>
   
-  <v-navigation-drawer 
-    v-model="showSideMenu"
-    app 
-    class="blue-grey darken-3"
-    width="210"
-  >
+  <div>
     <v-img 
       class="mx-auto ma-4"
       height="100px"
@@ -49,10 +44,9 @@
       </v-list-item-group>
 
     </v-list>
+  </div>
 
 
-
-  </v-navigation-drawer>
 
 </template>
 
@@ -62,10 +56,6 @@ import { eventBus } from '../main'
 
 export default {
   name: "Sidemenu",
-
-  props: {
-    drawer: Boolean
-  },
 
   data: () => {
     return {
@@ -82,7 +72,7 @@ export default {
         {
           title: 'Online overview',
           icon: 'bar_chart',
-          route: '/dashboard'
+          route: '/store'
         },
         {
           title: 'Marketing',
