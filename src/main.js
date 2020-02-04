@@ -11,14 +11,6 @@ import store from './store'
 
 Vue.use(VueAxios, axios)
 
-// router.beforeEach((to, from, next) => {
-//   //console.log(this.$store.state.isAuthenticated)
-//     if(!this.$store.state.isAuthenticated) 
-//       next('/login')
-//     //else
-//       //next()
-// })
-
 export const eventBus = new Vue()
 
 import App from './App.vue'
@@ -34,9 +26,11 @@ new Vue({
       }
     }
   },
+  
   render: h => h(App),
   vuetify,
   router,
   store,
-  api
+  api,
 }).$mount('#app')
+

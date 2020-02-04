@@ -1,10 +1,15 @@
 import axios from 'axios';
+import Vue from 'vue'
+import VueAxios from 'vue-axios'
 import store from './store';
 
 
-const db = 'http://13.53.97.92/oskar/';
+//axios.defaults.withCredentials = true
+
+const db = 'http://oskar.bbai.se/API/';
 
 export default {
+
 
   login: async (user) => {
 
@@ -12,25 +17,26 @@ export default {
       method: 'POST',
       url: db + 'login.php',
       headers: {
-        'Accept': 'application/json',
 
-        // REMOVE THIS LATER
+        // // REMOVE THIS LATER
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       data: {
         username: user.username,
         password: user.password,
       },
-      //withCredentials: 'true',
+      withCredentials: 'true',
     }
 
     return axios(request).then( (response) => {
       console.log(response)
       
-      if(response.status == 200)
+      if(response.status == 200) {
         return true
-      else
+      }
+      else 
         return false
+      
     }).catch( (error) => {
       console.log('Login error: ' + error)
       return false
@@ -52,43 +58,34 @@ export default {
 
   },
   
-  getVisitors: async () => {
+  getPredData: async (source, range = '') => {
     
+    var conn =  db + 'get_'+ source.toLowerCase() +'.php'
+
+    if(range != '' || range != 'weekly')
+      conn += '?periodicity='+ range
+
     const request = {
       method: 'GET',
-      url: db + 'get_visitors.php',
+      url: conn,
       headers: {
-       
+
       },
 
       withCredentials: 'true',
     }
 
     return axios(request).then( (response) => {
-      console.log(response)
-      return response.data
+
+      if(response.status == 200) {
+        return response.data
+      } else 
+        return false
+      
     }).catch( (error) => {
       console.log(error)
+      return false
     })
   },
 
-  getSales: async () => {
-    
-    const request = {
-      method: 'GET',
-      url: db + 'get_sales.php',
-      headers: {
-       
-      },
-
-      withCredentials: 'true',
-    }
-
-    return axios(request).then( (response) => {
-      console.log(response)
-      return response.data
-    }).catch( (error) => {
-      console.log(error)
-    })
-  }
 }

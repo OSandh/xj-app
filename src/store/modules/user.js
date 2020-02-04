@@ -1,7 +1,7 @@
 const state = {
   user: {
     name: 'Dormy',
-    dataTypes: ['Visitors', 'Sales'],
+    dataTypes: ['Sales', 'Visitors'],
     storeList: [
       {
         name: 'Örebro',

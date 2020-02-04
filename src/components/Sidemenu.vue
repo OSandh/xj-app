@@ -19,7 +19,7 @@
           v-for="item in menuItems" :key="item.title"
           @click="eventBus.$emit('gotoRoute', item)"
           v-slot:default="{ active }"
-          active-class="blue-grey darken-3"
+          active-class="accent" color="accent"
         >
 
           <div v-if="!active"
@@ -31,7 +31,7 @@
           <div v-if="active"
             class="pr-2"
           >
-            <v-icon color="red darken-4">{{ item.icon }}</v-icon>
+            <v-icon color="secondary">{{ item.icon }}</v-icon>
           </div>
 
           <v-list-item-content 

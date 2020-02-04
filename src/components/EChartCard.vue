@@ -1,20 +1,83 @@
 <template>
-  <v-card
-    class="ma-5"
-    elevation="3"
-  > 
-    <v-btn text @click="toggleType('line')">Line</v-btn>
-    <v-btn text @click="toggleType('bar')">Bar</v-btn>
+  <div>
 
-    <e-chart 
-      :autoresize="true"
-      :options="chartOptions"
-    />
-    
-  </v-card>
+    <v-card class="">  
+
+      <select-card :selectItems="selectItems"/>
+
+      <v-card
+        id="rangeCard"
+        flat
+        class="text-uppercase d-inline-flex "
+      >
+        <v-row
+          class="mx-2"
+        >
+          <v-text-field
+            class="text-uppercase"
+            placeholder="FROM"
+            v-model="graphRange.from"
+            color="primary"
+          />
+
+          <v-text-field
+            class="text-upercase"
+            placeholder="TO"
+            v-model="graphRange.to"
+            color="primary"
+          />
+
+          <v-radio-group
+            row
+            v-model="graphRange"
+            v-on:change="eventBus.$emit('getChartRange', graphRange)"
+          >
+
+            <v-radio
+              label="WEEK"
+              color="secondary"
+              value="weekly"
+              selected
+            />
+
+            <v-radio
+              label="MONTH"
+              color="secondary"
+              value='monthly'
+            />
+
+            <v-radio
+              label="YEAR"
+              color="secondary"
+              value="yearly"
+            />
+            
+
+          </v-radio-group>
+
+        
+        </v-row>
+      </v-card>
+
+      <e-chart
+        id="echart"
+        :autoresize="true"
+        :options="chartOptions"
+      />
+
+      <v-btn color="primary" text @click="toggleType('line')">Line</v-btn>
+      <v-btn color="primary" text @click="toggleType('bar')">Bar</v-btn>
+      
+    </v-card>
+
+  </div>
+
 </template>
 
 <script>
+import SelectCard from '../components/SelectCard.vue';
+import { eventBus } from '../main'
+
 import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/bar'
@@ -31,51 +94,54 @@ export default {
   name: 'echartcard',
 
   props: {
-    rawData: Array,
-    chartOptions: {}
+    selectItems: Array,
+    chartOptions: {},
   },
 
   components: {
-    'e-chart': ECharts
+    'select-card': SelectCard,
+    'e-chart': ECharts,
   },
 
+  data() {
+    return {
+
+      eventBus: eventBus,
+
+      graphRange: 'weekly',
+      
+      graphDates: {
+        from: '',
+        to: ''
+      },
+
+    };
+  },
+
+
   computed: {
-    chartData: function() {
-      return this.rawData
-    },
     
     options: function() {
       return this.chartOptions
     }
   },
 
-  data() {
-
-    return {
- 
-    };
-  },
-
-
   methods: {
-    toggleType: function(chartType) {
 
+    toggleType: function(chartType) {
        this.options.series.forEach(element => {
          element.type = chartType
-         console.log(element)
        });
-
-    } 
+    },
   },
 };
 </script>
 
 <style>
-#chart{
-  font-family: 'Courier New', Courier, monospace
-}
+
 .echarts {
     width: 100%;
-    height: 400px; /* or e.g. 400px */
+    height: 500px; /* or e.g. 400px */
 }
+
 </style>

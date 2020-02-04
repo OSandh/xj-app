@@ -1,203 +1,116 @@
 <template>
-  <v-container>
+  <div class="ma-5">
+    
+    <store-chart 
+      ref="storeChart"
+    ></store-chart>
 
-    <select-card :selectItems="chartTypes"/>
+    <v-row>
 
-    <echart-card :rawData="chartData" :chartOptions="eChartOptions"/>
+      <v-col 
+        v-for="values in cardValues"
+        :key="values.name"
+        cols="12" xl="3" lg="3" md="6" sm="6"
+      >
+        <info-card 
+          :title="values.name" 
+          :cardVal="values.val" 
+          :cardSecVal="values.secVal" />
+      </v-col>
 
-    <chart-card :rawData="chartData"/>
 
-    <info-card :cardTitle="'Sales'"/>
-
-  </v-container>
-
+    </v-row>
+  </div>
 </template>
 
 <script>
-import SelectCard from '../components/SelectCard.vue';
-import ChartCard from '../components/ChartCard.vue';
-import EChartCard from '../components/EChartCard.vue'
-import InfoCard from '../components/InfoCard.vue';
-import api from '../api.js';
-import { eventBus } from '../main'
+import InfoCard from "../components/InfoCard.vue";
+//import api from "../api.js";
+import { eventBus } from "../main";
+
+import StoreChart from '../components/StoreChart.vue'
 
 export default {
-  name: 'StoreView',
+  name: "StoreView",
 
   components: {
-    'select-card': SelectCard,
-    'chart-card': ChartCard,
-    'echart-card': EChartCard,
-    'info-card': InfoCard,
-
+    //'echart-card': EChartCard,
+    'store-chart': StoreChart,
+    "info-card": InfoCard
   },
 
   data() {
     return {
-      chartData: [],
-      visitorData: [
-        ['date', 'visitors', 'prediction']
-      ],
-      salesData: [
-        ['date', 'sales', 'prediction']
-      ],
+      isMounted: false,
 
-      eChartOptions: {
-        title: {
-            id: 'chartTitle',
-            text: 'EChart Test',
-          },
+      currentChartType: "sales",
 
-          legend: {},
-
-          tooltip: {
-            trigger: 'axis',
-          },
-
-          dataset: {
-            source: {}
-          },
-
-          xAxis: {
-            type: 'category',
-            data: []
-          },
-
-          yAxis: {
-            gridIndex: 0
-          },
-
-          grid: {
-
-          },
-
-          series: [
-            
-          ],
-
-          toolbox: {
-            feature: {
-              saveAsImage: []
-            }
-          }
-
-
-      }
-    }
+      currentRange: "weekly",
+      
+    };
   },
 
   computed: {
     storeItems() {
-      var items = ['All Stores'];
-      this.$store.getters['user/user'].storeList.forEach(element => {
+      var items = ["All Stores"];
+      this.$store.getters["user/user"].storeList.forEach(element => {
         items.push(element.name);
       });
       return items;
     },
+
     // just a test
     shortItems() {
       return this.$store.getters.shortItems;
     },
 
-    chartTypes () {
-      var items = []
-      this.$store.getters['user/user'].dataTypes.forEach( element => {
-        items.push(element)
-      })
-      return items
-    }
-  },
-  mounted() {
-    var visitorsResponse = api.getVisitors()
-    visitorsResponse.then( (data) => {
-
-      data.forEach((element) => {
-        this.visitorData.push([element.date, element.visitors, element.prediction])
-      })
-
-      // TEMP
-      this.visitorData.forEach( (element) => {
-        this.chartData.push(element)
-      })
-
-      
-     // this.eChartOptions.title.subtext = this.chartData[0][1]
-      
-      var xAxis = []
-      var vData = []
-      var pData = []
-      this.visitorData.forEach(element => {
-        if(element[0] != 'date'){
-          console.log(element)
-          xAxis.push(element[0])
-
-          vData.push(element[1])
-
-          pData.push(element[2])
-        }
-        
+    chartTypes() {
+      var items = [];
+      this.$store.getters["user/user"].dataTypes.forEach(element => {
+        items.push(element);
       });
-      this.eChartOptions.xAxis.data = xAxis
+      return items;
+    },
 
-      // Visitor line
-      this.eChartOptions.series.push({
-        name: 'Visitors', 
-        type: 'bar',
-        data: vData,
-        smooth: true
-      })
-      
-      // Prediction line
-      this.eChartOptions.series.push({
-        name: 'Prediction', 
-        type: 'line',
-        data: pData,
-        smooth: true
-      })
-      
+    totalSales() {
+      if(!this.isMounted)
+        return 0
 
-      
-      
-    })
+      return this.$refs.storeChart.totalSales
+    },
 
-    var salesResponse = api.getSales()
-    salesResponse.then( (data) => {
-      
-      data.forEach((element) => {
-        this.salesData.push([element.date, element.sales, element.prediction])
-      })
-    })
+    totalVisitors() {
+      if(!this.isMounted)
+        return 0
+
+      return this.$refs.storeChart.totalVisitors
+    },
+    
+    cardValues() {
+      return [
+        { name: 'Sales', val: this.totalSales, secVal: 'SEK'},
+        { name: 'Visitors', val: this.totalVisitors, secVal: ''},
+        { name: 'Pred. Accur.', val: 80, secVal: '%'},
+        { name: 'Marketing Effect', val: 80, secVal: '%'},
+      ]
+    }, 
+
+  },
+
+  methods: {
+
+  },
+
+  mounted() {
+    this.isMounted = true
+  
   },
 
   created() {
-    eventBus.$on('selectionChanged', (data) => {
-      
-      console.log('changed to ' + data)
-      
 
-      if(data == 'Visitors') {
-        this.chartData = []
-
-        this.visitorData.forEach( (element) => {
-          this.chartData.push(element)
-        })
-
-        console.log('Visitors filled')
-
-      } else if(data == 'Sales'){
-        this.chartData = []
-        this.salesData.forEach( (element) => {
-          this.chartData.push(element)
-        })
-
-        console.log('Sales filled')
-      }
-
-    })
   }
-}
+};
 </script>
 
 <style>
-
 </style>
