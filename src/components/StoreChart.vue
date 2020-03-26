@@ -63,9 +63,7 @@
         </v-row>
       </v-card>
 
-      <e-chart
-        id="echart"
-        :autoresize="true"
+      <generic-chart
         :options="chartOptions"
       />
 
@@ -83,17 +81,7 @@ import SelectCard from '../components/SelectCard.vue';
 import { eventBus } from '../main'
 import api from "../api.js";
 import EChartOptions from './EChartOptions'
-
-import ECharts from 'vue-echarts'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/chart/bar'
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/legend'
-import 'echarts/lib/component/grid'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/component/toolbox'
-import 'echarts/lib/component/dataset'
-import 'echarts/lib/component/axis'
+import GenericChart from './GenericChart'
 
 
 export default {
@@ -105,7 +93,7 @@ export default {
 
   components: {
     'select-card': SelectCard,
-    'e-chart': ECharts,
+    GenericChart,
   },
 
   data() {
